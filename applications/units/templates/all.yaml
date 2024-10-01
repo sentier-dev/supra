@@ -15,7 +15,7 @@ spec:
   hostnames: ["units.sentier.dev", "api.units.sentier.dev"]
   rules:
     - backendRefs:
-      - name: {{ include "units.fullname" . }}
+      - name: {{ include "units.fullname" . }}-svc
         port: {{ .Values.service.port }}
 ---
 apiVersion: apps/v1
