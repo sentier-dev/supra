@@ -1,1 +1,1 @@
-Installation was done following https://github.com/NatLibFi/Skosmos/wiki/Install-Skosmos-with-Fuseki-in-Docker. Only SKOSMOS is running in a container.
+Installation was done following https://github.com/NatLibFi/Skosmos/wiki/Install-Skosmos-with-Fuseki-in-Docker. Only SKOSMOS is running in a container, and that's because I don't want to figure out how to execute PHP on Nginx.
