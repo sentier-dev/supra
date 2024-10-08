@@ -1,0 +1,55 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: units-ui-sentier-dev-route
+  namespace: units
+spec:
+  parentRefs:
+  - name: dds-gateway
+    namespace: cert-manager
+  hostnames: ["units.sentier.dev"]
+  rules:
+    - backendRefs:
+      - name: {{ include "units-ui.fullname" . }}-svc
+        port: {{ .Values.service.port }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{ include "units-ui.labels" . | nindent 4 }}
+  name: {{ include "units-ui.fullname" . }}
+  namespace: units
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{ include "units-ui.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{ include "units-ui.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
+          name: web
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: units-ui-svc
+  name: units-ui-svc
+  namespace: units
+spec:
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+  selector:
+    {{- include "units-ui.selectorLabels" . | nindent 4 }}
