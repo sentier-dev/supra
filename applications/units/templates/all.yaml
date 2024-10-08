@@ -12,7 +12,7 @@ spec:
   parentRefs:
   - name: dds-gateway
     namespace: cert-manager
-  hostnames: ["units.sentier.dev", "api.units.sentier.dev"]
+  hostnames: ["api.units.sentier.dev"]
   rules:
     - backendRefs:
       - name: {{ include "units.fullname" . }}-svc
