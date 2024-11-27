@@ -1,0 +1,14 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: authentik-cauldron-ch-route
+  namespace: authentik
+spec:
+  parentRefs:
+  - name: dds-gateway
+    namespace: cert-manager
+  hostnames: ["authentik.cauldron.ch"]
+  rules:
+    - backendRefs:
+      - name: {{ include "authentik.fullname" . }}-svc
+        port: {{ .Values.service.port }}
