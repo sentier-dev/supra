@@ -1,0 +1,12 @@
+apiVersion: v2
+name: keycloak  # Your application name
+description: A Helm chart for deploying Keycloak
+type: application
+version: 0.1.0  # Your application version
+appVersion: "latest"
+
+dependencies:
+- name: keycloak  
+  version: 24.2.2
+  repository: https://charts.bitnami.com/bitnami
+
