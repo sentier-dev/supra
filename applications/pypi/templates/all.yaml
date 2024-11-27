@@ -39,6 +39,10 @@ spec:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        command: ["pypi-server"]
+        args:
+        - run
+        - "/data/packages"
         ports:
         - containerPort: {{ .Values.service.port }}
           name: web
