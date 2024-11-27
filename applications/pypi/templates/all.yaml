@@ -12,7 +12,7 @@ spec:
   parentRefs:
   - name: dds-gateway
     namespace: cert-manager
-  hostnames: ["pypi.cauldron.ch"]
+  hostnames: ["pypi.cauldron.ch", "pypi.sentier.dev"]
   rules:
     - backendRefs:
       - name: {{ include "pypi.fullname" . }}-svc
