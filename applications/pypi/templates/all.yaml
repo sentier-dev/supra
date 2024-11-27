@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pypi
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: pypi-sentier-dev-route
+  namespace: pypi
+spec:
+  parentRefs:
+  - name: dds-gateway
+    namespace: cert-manager
+  hostnames: ["pypi.cauldron.ch"]
+  rules:
+    - backendRefs:
+      - name: {{ include "pypi.fullname" . }}-svc
+        port: {{ .Values.service.port }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    {{ include "pypi.labels" . | nindent 4 }}
+  name: {{ include "pypi.fullname" . }}
+  namespace: pypi
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{ include "pypi.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{ include "pypi.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
+          name: web
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: pypi-svc
+  name: pypi-svc
+  namespace: pypi
+spec:
+  ports:
+    - name: http
+      port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.port }}
+  selector:
+    {{- include "pypi.selectorLabels" . | nindent 4 }}
