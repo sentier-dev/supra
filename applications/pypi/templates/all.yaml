@@ -49,7 +49,7 @@ kind: Service
 metadata:
   labels:
     app.kubernetes.io/name: pypi-svc
-  name: pypi-svc
+  name: pypiserver-svc
   namespace: pypi
 spec:
   ports:
