@@ -42,6 +42,8 @@ spec:
         command: ["pypi-server"]
         args:
         - run
+        - "-a=."
+        - "-P=."
         - "/data/packages"
         ports:
         - containerPort: {{ .Values.service.port }}
