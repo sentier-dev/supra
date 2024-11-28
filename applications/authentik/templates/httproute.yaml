@@ -10,5 +10,5 @@ spec:
   hostnames: ["authentik.cauldron.ch"]
   rules:
     - backendRefs:
-      - name: {{ include "authentik.fullname" . }}-svc
+      - name: {{ include "authentik.fullname" . }}-server
         port: {{ .Values.service.port }}
