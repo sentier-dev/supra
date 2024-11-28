@@ -43,12 +43,24 @@ spec:
         args:
         - run
         - "-a=."
-        - "-P=."
+        - "-P"
+        - /etc/pypi/htpasswd.txt
         - "/data/packages"
         ports:
         - containerPort: {{ .Values.service.port }}
           name: web
           protocol: TCP
+        volumeMounts:
+        - name: htpasswd
+          mountPath: /etc/pypi
+          readOnly: true
+      volumes:
+      - name: htpasswd
+        secret:
+          secretName: htpasswd
+          items:
+          - key: htpasswd.txt
+            path: htpasswd.txt
 ---
 apiVersion: v1
 kind: Service
