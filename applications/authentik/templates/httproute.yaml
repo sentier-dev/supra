@@ -11,4 +11,4 @@ spec:
   rules:
     - backendRefs:
       - name: {{ include "authentik.fullname" . }}-server
-        port: {{ .Values.service.port }}
+        port: {{ .Values.server.service.servicePortHttp }}
