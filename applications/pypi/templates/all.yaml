@@ -3,6 +3,42 @@ kind: Namespace
 metadata:
   name: pypi
 ---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pypiserver
+spec:
+  capacity:
+    storage: 64Gi
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-storage
+  local:
+    path: /var/lib/pypiserver
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - dds-kube-node-4
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pypiserver
+spec:
+  storageClassName: local-storage
+  accessModes:
+  - ReadWriteOnce
+  volumeName: pypiserver
+  resources:
+    requests:
+      storage: 64Gi
+---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -45,17 +81,22 @@ spec:
         - "-a"
         - "download, update, list"
         - "-P"
-        - /etc/pypi/htpasswd.txt
-        - "/data/packages"
+        - /etc/pypiserver/htpasswd.txt
+        - /var/lib/pypiserver
         ports:
         - containerPort: {{ .Values.service.port }}
           name: web
           protocol: TCP
         volumeMounts:
+        - name: data
+          mountPath: /var/lib/pypiserver
         - name: htpasswd
-          mountPath: /etc/pypi
+          mountPath: /etc/pypiserver
           readOnly: true
       volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: pypiserver
       - name: htpasswd
         secret:
           secretName: htpasswd
