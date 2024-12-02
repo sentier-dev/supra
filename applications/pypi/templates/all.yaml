@@ -83,6 +83,8 @@ spec:
         - "-P"
         - /etc/pypiserver/htpasswd.txt
         - /var/lib/pypiserver
+        - "--welcome"
+        - "/var/www/html/index.html"
         ports:
         - containerPort: {{ .Values.service.port }}
           name: web
@@ -92,6 +94,9 @@ spec:
           mountPath: /var/lib/pypiserver
         - name: htpasswd
           mountPath: /etc/pypiserver
+          readOnly: true
+        - name: welcome
+          mountPath: /var/www/html
           readOnly: true
       volumes:
       - name: data
@@ -103,6 +108,9 @@ spec:
           items:
           - key: htpasswd.txt
             path: htpasswd.txt
+      - name: welcome
+        configMap:
+          name: pypiserver-welcome-html
 ---
 apiVersion: v1
 kind: Service

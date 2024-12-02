@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pypiserver-welcome-html
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Cauldron - The friendly Python package index</title>
+      <style>
+        body {
+          background-color: #f7f7f7;
+          color: #222222;
+          font-family: 'Futura', sans-serif;
+          margin: 0;
+          padding: 20px;
+        }
+    
+        h1 {
+          color: #222222; /* Dark gray heading to match logo */
+          font-size: 3em;
+          text-align: center;
+          margin-bottom: 20px;
+        }
+    
+        .logo {
+          text-align: center;
+          margin-bottom: 30px;
+        }
+    
+        p {
+          line-height: 1.6;
+        }
+    
+        a {
+          color: #007bff; /* Blue links for a different accent */
+          text-decoration: none;
+        }
+    
+        .container {
+          max-width: 800px;
+          margin: 0 auto;
+          background-color: #ffffff;
+          padding: 30px;
+          border-radius: 10px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    
+        }
+    
+        ul {
+          list-style: none;
+          padding: 0;
+        }
+    
+        li {
+          margin-bottom: 10px;
+        }
+    
+        pre {
+          background-color: #eee;
+          padding: 10px;
+          border-radius: 5px;
+          overflow: auto;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="logo">
+          <img src="https://github.com/cauldron/logo/blob/main/Cauldron-logo-transparent-BG-01.png?raw=true" alt="Cauldron Logo" width="400">
+        </div>
+    
+        <h1>Cauldron Python Package Repository</h1>
+    
+        <p>
+          This is a private index, currently serving {{ "{{" }}NUMPKGS{{ "}}" }} packages.
+          You can use it to install Cauldron's Python packages.
+        </p>
+    
+        <p>
+          To get started, you'll need to configure your <code>pip</code> client to
+          use this index.  You can do this by setting the
+          <code>index-url</code> option in your <code>pip.conf</code> file:
+        </p>
+    
+        <pre>
+        [global]
+        index-url = https://pypi.cauldron.ch/simple/
+        </pre>
+    
+        <p>
+          You can also specify the index URL on the command line when using
+          <code>pip</code>:
+        </p>
+    
+        <pre>
+        $ pip install --index-url https://pypi.cauldron.ch/simple/ &lt;package_name&gt;
+        </pre>
+    
+        <p>
+          If you need to authenticate with this index, you can use the
+          <code>--extra-index-url</code> option and provide your credentials:
+        </p>
+    
+        <pre>
+        $ pip install --index-url https://pypi.cauldron.ch/simple/ \
+                    --extra-index-url https://user:password@pypi.cauldron.ch/simple/ \
+                    &lt;package_name&gt;
+        </pre>
+         <p>
+          This instance is running version {{ "{{" }}VERSION{{ "}}" }} of the <a href="https://pypi.org/project/pypiserver/">pypiserver</a> software.
+        </p>
+    
+        <p>Happy packaging!</p>
+      </div>
+    </body>
+    </html>
